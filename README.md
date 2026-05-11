@@ -49,19 +49,27 @@ Một nền tảng web ứng dụng mô hình MVC cung cấp trải nghiệm mua
 
 **1. Clone repository**
 ```bash
-git clone https://github.com/huytruong204/WebBanSanPhamToc.git
-2. Mở dự án bằng Visual Studio
-Yêu cầu đã cài đặt .NET 8.0 SDK và SQL Server.
-Mở file .sln bằng Visual Studio.
-3. Cập nhật Chuỗi kết nối (Connection String)
-Mở file appsettings.json.
-Tìm cấu hình DefaultConnection và thay đổi chuỗi kết nối sao cho phù hợp với SQL Server local của bạn.
-Thay đổi địa chỉ mail và key vnpay của bạn.
-4. Khởi tạo Cơ sở dữ liệu (Migration) Mở Package Manager Console trong Visual Studio và chạy các lệnh sau:
-Update-Database
-5. Chạy dự án
-Run trên Visual Studio để khởi động ứng dụng.
+git clone https://github.com/Username_cua_ban/Ten_Repository_cua_ban.git
+```
 
---------------------------------------------------------------------------------
-👤 Tác giả
-Trương Công Huy - Full-stack Developer - GitHub Profile
+**2. Mở dự án bằng Visual Studio**
+* Yêu cầu đã cài đặt **.NET 8.0 SDK** và **SQL Server**.
+* Mở file `.sln` bằng Visual Studio.
+
+**3. Cập nhật Chuỗi kết nối (Connection String)**
+* Mở file `appsettings.json`.
+* Tìm cấu hình `DefaultConnection` và thay đổi chuỗi kết nối sao cho phù hợp với SQL Server local của bạn. Thay đổi địa chỉ mail và key vnpay của bạn.
+
+**4. Khởi tạo Cơ sở dữ liệu (Migration)**
+Mở **Package Manager Console** trong Visual Studio và chạy lệnh sau:
+```bash
+Update-Database
+```
+
+**5. Chạy dự án**
+* `Run` trên Visual Studio để khởi động ứng dụng.
+
+---
+
+## 👤 Tác giả
+* **Trương Công Huy** - *Full-stack Developer*
