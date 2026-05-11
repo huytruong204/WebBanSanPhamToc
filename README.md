@@ -58,7 +58,7 @@ git clone https://github.com/Username_cua_ban/Ten_Repository_cua_ban.git
 
 **3. Cập nhật Chuỗi kết nối (Connection String)**
 * Mở file `appsettings.json`.
-* Tìm cấu hình `DefaultConnection` và thay đổi chuỗi kết nối sao cho phù hợp với SQL Server local của bạn. Thay đổi địa chỉ mail và key vnpay của bạn.
+* Tìm cấu hình `DefaultConnection` và thay đổi chuỗi kết nối, địa chỉ mail và key vnpay sao cho phù hợp với SQL Server local của bạn.
 
 **4. Khởi tạo Cơ sở dữ liệu (Migration)**
 Mở **Package Manager Console** trong Visual Studio và chạy lệnh sau:
