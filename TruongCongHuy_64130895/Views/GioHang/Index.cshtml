@@ -1,0 +1,166 @@
+﻿@model IEnumerable<TruongCongHuy_64130895.ViewModels.CartItem>
+<!-- Breadcrumb Start -->
+<section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="breadcrumb_iner">
+                    <div class="breadcrumb_iner_item">
+                        <h2>Giỏ hàng</h2>
+                        <p>Trang Chủ <span>-</span>Giỏ hàng của bạn</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb End -->
+<!-- Cart Area -->
+<section class="cart_area padding_top">
+    <div class="container">
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger my-2">@TempData["Error"]</div>
+        }
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success my-2">@TempData["Success"]</div>
+        }
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success my-2">@TempData["Message"]</div>
+        }
+        <div class="cart_inner">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="col-5">Sản Phẩm</th>
+                            <th scope="col" class="col-3">Giá</th>
+                            <th scope="col" class="col-2">Số Lượng</th>
+                            <th scope="col" class="col-2">Tổng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartTableBody">
+                        @foreach (var item in Model)
+                        {
+                            <tr data-productId="@item.ProductId" id="sp-@item.ProductId">
+                                <td>
+                                    <div class="media">
+                                        <div class="d-flex">
+                                            <img src="/Admin-template/Images/SanPham/@item.Img" alt="" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" />
+                                        </div>
+                                        <div class="media-body">
+                                            <p>@item.ProductName</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5>@item.UnitPrice.ToString("#,##0 VND")</h5>
+                                </td>
+                                <td>
+                                    <div class="product_count">
+                                        <a class="input-number-decrement" onclick="updateCart(@item.ProductId, false)"> <i class="ti-angle-down"></i></a>
+                                        <input  type="number" id="quantity-@item.ProductId" value="@item.Quantity" min="1" readonly />
+                                        <a class="input-number-increment" onclick="updateCart(@item.ProductId, true)"> <i class="ti-angle-up"></i></a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5 id="total">@item.Total.ToString("#,##0 VND")</h5>
+                                </td>
+                                <td>
+                                    <button class="btn btn-md rounded-circle bg-light border mt-4" onclick="removeFromCart(@item.ProductId)">
+                                        <i class="fa fa-times text-danger"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="bottom_button">
+                        <tr>
+                            <td colspan="3" class="text-right">
+                                <h5>Tạm Tính</h5>
+                            </td>
+                            <td>
+                                <h5 id="subtotal">@ViewBag.Subtotal.ToString("#,##0 VND")</h5>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="checkout_btn_inner float-right">
+                    <a class="btn_1 checkout_btn_1" asp-controller="GioHang" asp-action="Checkout">Tiến Hành Thanh Toán</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Cart Area -->
+
+<script>
+    function updateCart(productId, isIncrement) {
+        console.log("Updating cart for product ID:", productId);
+        $.ajax({
+            url: '@Url.Action("UpdateCart", "GioHang")',
+            data: { productId: productId, quantity: 1, isIncrement: isIncrement },
+            success: function (response) {
+                if (response.success) {
+                    const updatedItem = response.updatedCart.find(item => item.productId === productId);
+                    if (updatedItem) {
+
+                        const row = $("tr[data-productId='" + productId + "']");  
+                            row.find("#quantity-" + productId).val(updatedItem.quantity);
+                            row.find("#total").text(updatedItem.total.toLocaleString() + ' VND');
+                            $("#subtotal").text(response.subtotal.toLocaleString() + ' VND');
+                            $.ajax({
+                                url: '@Url.Action("RefreshCartViewComponent", "GioHang")',
+                                success: function (response) {
+                                    $("#View_Cart").html(response);
+                                },
+                                error: function (xhr, ajaxOptions, thrownError) {
+                                    console.log(thrownError)
+                                    alert("Error updating Cart ViewComponent.");
+                                }
+                            });
+                    }
+                    else {
+                         removeFromCart(productId);
+                    }
+                } else {
+                    alert("Có lỗi xảy ra!");
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.error("Error:", thrownError);
+                alert("Có lỗi xảy ra khi cập nhật giỏ hàng.");
+            }
+        });
+    }
+
+    function removeFromCart(productId) {
+        $.ajax({
+            url: '@Url.Action("RemoveFromCart", "GioHang")',
+            type: 'POST',
+            data: { productId: productId },
+            success: function (response) {
+                if (response.success) {
+                    $.ajax({
+                        url: '@Url.Action("RefreshCartViewComponent", "GioHang")',
+                        success: function (response) {
+                            $("#View_Cart").html(response);
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(thrownError)
+                            alert("Error updating Cart ViewComponent.");
+                        }
+                    });
+                    $("tr[data-productid='" + productId + "']").remove();
+
+                    $("#subtotal").text(response.subtotal.toLocaleString() + ' VND');
+                } else {
+                    alert("Có lỗi xảy ra!");
+                }
+            }
+        });
+    }
+</script>

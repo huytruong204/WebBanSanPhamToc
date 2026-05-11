@@ -1,0 +1,73 @@
+﻿@model IEnumerable<TruongCongHuy_64130895.Models.Product>
+
+<div id="successToast" class="d-none">
+    <div class="icon-check mb-3">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+    </div>
+
+    <p class="mb-0 text-white">Sản phẩm đã được thêm vào Giỏ hàng</p>
+</div>
+<div class="banner_slider owl-carousel">
+    @foreach(var item in Model)
+    {
+        <div class="single_banner_slider">
+            <div class="row">
+                <div class="col-lg-5 col-md-8">
+                    <div class="banner_text">
+                        <div class="banner_text_iner">
+                            <h1>
+                                @item.Name
+                            </h1>
+                            <p style="display: -webkit-box; max-height: 3.2rem; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; white-space: normal; -webkit-line-clamp: 2; line-height: 1.6rem;">
+                               @item.Description
+                            </p>
+                            <a onclick="clickAddToCart(@item.Id)" class="btn_2">Mua ngay</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="banner_img d-none d-lg-block" >
+                    <img src="/Admin-template/Images/SanPham/@item.ImageUrl" alt="" style="width: 695px; height: 360px;">
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="slider-counter"></div>
+
+<script>
+    function clickAddToCart(productId) {
+        $.ajax({
+            url: '@Url.Action("AddToCart", "GioHang")',
+            data: { productId: productId },
+            success: function (response) {
+
+                if (response.success) {
+
+                    $.ajax({
+                        url: '@Url.Action("RefreshCartViewComponent", "GioHang")',
+                        success: function (response) {
+                            $("#View_Cart").html(response);
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(thrownError)
+                            alert("Error updating Cart ViewComponent.");
+                        }
+                    });
+
+                    const toast = $('#successToast');
+                    toast.removeClass('d-none');
+
+                    setTimeout(() => {
+                        toast.addClass('d-none');
+                    }, 2000);
+                } else {
+                    alert("Có lỗi xảy ra! Vui lòng thử lại.");
+                }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.responseText);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAeenTBIAivEykYEDZKJZ97wAAAAACAAAAAAAQZgAAAAEAACAAAAAyZhD7wrWMkOyCvhzsQQhRda1zCUmSRvbrt5Ps1xIFAwAAAAAOgAAAAAIAACAAAAC9f5519Knn7htPJm3KjTqTN2Ii8otOwYSrOs1yAOX39YAAAADVCrlQ+HfqXTclYQU9v2wC/Bxri4CDeva9h4e9YEJOpOOu/C/qssD+veSjw7tVkQqIgtyyK/xXWDRemGzTIG7jNC0BnriGXuTvL4aTQ+TeD5LF8RdFeWT7vJ9SJ1jY2bBWFzRepo1xMe2i6F23AVfqBtYrOyqduGNDI18VmkyKmEAAAABrlV8vt1aqPNdAEaxR4nfR/yTCU24LebUsvU1BWoB7VH/XYHXhhuot821zNvXEnEB9RpyQq/hpGfv/NhzjP94d</EncryptedPassword>
+    <History>True|2024-12-31T04:23:34.8256023Z;True|2024-12-31T10:53:04.7726688+07:00;True|2024-12-31T10:47:22.8033027+07:00;True|2024-12-31T10:29:16.0369871+07:00;True|2024-12-31T10:25:13.6552558+07:00;False|2024-12-31T10:24:21.0312337+07:00;True|2024-12-31T10:22:28.1311643+07:00;True|2024-12-31T10:20:24.0151275+07:00;True|2024-12-31T10:18:45.7236273+07:00;True|2024-12-31T10:13:39.1988418+07:00;True|2024-12-29T12:30:25.8531569+07:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Data Source=truongconghuy.database.windows.net,1433%3bInitial Catalog=TruongCongHuy_64130895_db%3bUser ID=huy204%3bPassword=122004%40huy</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="TruongCongHuy_64130895.Models.ShopOnlineSalesContext">
+      <Value>Data Source=truongconghuy.database.windows.net,1433%3bInitial Catalog=TruongCongHuy_64130895_db%3bUser ID=huy204%3bPassword=122004%40huy</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

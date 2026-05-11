@@ -1,0 +1,24 @@
+﻿@model TruongCongHuy_64130895.Areas.Admin.Models.AddRoleToUserViewModel
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+else
+{
+    <h1>Thêm Vai trò cho Người dùng: @Model.UserName</h1>
+
+    <form asp-action="AddRoleToUser" method="post">
+        <input type="hidden" name="UserId" value="@Model.UserId" />
+
+        <div class="form-group">
+            <label for="SelectedRole">Chọn Vai trò</label>
+            <select asp-for="SelectedRole" asp-items="@(new SelectList(Model.Roles))" class="form-control">
+                <option value="">-- Chọn vai trò --</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary my-2">Thêm Vai trò</button>
+    </form>
+}

@@ -1,0 +1,80 @@
+﻿@model TruongCongHuy_64130895.Models.Customers
+@{
+    ViewData["Title"] = "Thông Tin Khách Hàng";
+    Layout = "_LayoutCustomer";
+}
+<!-- breadcrumb start -->
+<section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="breadcrumb_iner">
+                    <div class="breadcrumb_iner_item">
+                        <h2>Thông Tin Khách Hàng</h2>
+                        <p>Trang Chủ <span>-</span> Thông Tin Khách Hàng</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb end -->
+<!--================ Customer Info Start =================-->
+<section class="customer_info padding_top">
+    <div class="container">
+        <div class="row">
+            <!-- Avatar và Tên -->
+            <div class="col-lg-4 col-md-4 text-center">
+                <div class="customer_avatar">
+                    <img src="~/Image/Avatar/@Model.avatar" 
+                         class="img-fluid rounded-circle border"
+                         style="height:55vh; border: 3px solid #ddd;">
+                </div>
+            </div>
+
+            <!-- Thông Tin Cá Nhân -->
+            <div class="col-lg-8 col-md-8">
+                <div class="customer_details">
+                    <h3 class="mb-4" style="font-size: 1.5rem; font-weight: bold;">Thông Tin Cá Nhân</h3>
+                    <table class="table table-striped" style="font-size: 1.2rem;">
+                        <tbody>
+                            <tr hidden>
+                                <th hidden>Id:</th>
+                                <td hidden>@Model.Id</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="width: 30%;">Họ và tên:</th>
+                                <td>@Model.FullName</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="width: 30%;">Tên Đăng Nhập:</th>
+                                <td>@Model.UserName</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Địa Chỉ:</th>
+                                <td>@Model.Address</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Email:</th>
+                                <td>@Model.Email</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Số Điện Thoại:</th>
+                                <td>@Model.PhoneNumber</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- Nút Chỉnh Sửa -->
+                    <a asp-action="Edit" asp-route-id="@Model.Id"
+                       class="btn btn-info rounded-2  mt-4"
+                       style="font-size: 1.2rem; padding: 15px 30px;">
+                        Thay đổi thông tin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================ Customer Info End =================-->
+
+=

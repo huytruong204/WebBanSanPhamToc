@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+
+@{
+    ViewData["Title"] = "Xóa Vai Trò";
+}
+
+<h2>Xóa Vai Trò</h2>
+
+<div class="alert alert-danger" role="alert">
+    Bạn có chắc chắn muốn xóa vai trò "<strong>@Model.Name</strong>" không?
+</div>
+<form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Đồng ý, Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

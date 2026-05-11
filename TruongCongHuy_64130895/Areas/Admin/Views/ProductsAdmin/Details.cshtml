@@ -1,0 +1,73 @@
+﻿@model TruongCongHuy_64130895.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h4>Sản phẩm</h4>
+<hr />
+
+<div>
+
+    <dl class="row bg-light rounded-2 p-2">
+        <dt class = "col-sm-2">
+            Tên sản phẩm
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Mô tả
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            Đơn giá
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Price.ToString("#,##0 VND")
+        </dd>
+        <dt class = "col-sm-2">
+            Ảnh sản phẩm
+        </dt>
+        <dd class = "col-sm-10">
+            <img src="/Admin-template/Images/SanPham/@Model.ImageUrl"
+                 style="height: 100px; width: 200px; object-fit:contain" />
+        </dd>
+        <dt class = "col-sm-2">
+            Ngày tạo
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+        <dt class="col-sm-2">
+            Danh mục sản phẩm
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Category.Name)
+        </dd>
+        <div class="row">
+            <dt class="col-xl-2">
+                Trạng thái:  @Html.DisplayFor(model => model.IsActive)
+            </dt>
+            <dt class="col-xl-2">
+                IsHots:  @Html.DisplayFor(model => model.IsHot)
+            </dt>
+
+            <dt class="col-xl-2">
+                IsSales:  @Html.DisplayFor(model => model.IsOnSale)
+            </dt>
+            <dt class="col-xl-2">
+                Giảm giá(%):  @Html.DisplayFor(model => model.DiscountPercent)
+            </dt>
+            <dt class="col-xl-3">
+                Giá sales:  @(Model.PriceSales.HasValue ? Model.PriceSales.Value.ToString("#,##0 VND") : null)
+            </dt>
+        </div>
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-primary my-1">Quay lại</a>
+</div>

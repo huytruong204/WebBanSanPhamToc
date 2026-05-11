@@ -1,0 +1,94 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<TruongCongHuy_64130895.Areas.Admin.Models.OrderViewModel>
+@using Microsoft.AspNetCore.Identity;
+
+<h2>Quản lý đơn hàng</h2>
+
+<form method="get" class="col-lg-3 mb-3">
+    <select class="form-select" name="status" asp-items="ViewBag.Status" onchange="this.form.submit()"></select>
+</form>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<table class="table bg-light rounded-2 p-2 table-bordered">
+    <thead>
+        <tr>
+            <th>Mã đơn</th>
+            <th>Khách hàng</th>
+            <th>Ngày đặt</th>
+            <th>Tổng tiền</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+            <th>Chi tiết đơn hàng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.CustomerName</td>
+                <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                <td>@order.TotalPrice.ToString("#,##0 VND")</td>
+                <td>@order.Status</td>
+                <td>
+                    @{
+                        switch (order.Status)
+                        {
+                            case "Đang xử lý":
+                                <form method="post" asp-action="MarkAsShipped" asp-controller="OrderManageAdmin">
+                                    <input type="hidden" name="orderId" value="@order.OrderId" />
+                                    <button type="submit" class="btn btn-success">Đang Giao</button>
+                                </form>
+                                ;
+                                break;
+                            case "Đang giao":
+                                <form method="post" asp-action="MarkAsDelivered" asp-controller="OrderManageAdmin">
+                                    <input type="hidden" name="orderId" value="@order.OrderId" />
+                                    <button type="submit" class="btn btn-info">Giao Thành Công</button>
+                                </form>
+                                ;
+                                break;
+                            case "Đã giao":
+                                <form method="post" asp-action="MarkAsRefunded" asp-controller="OrderManageAdmin">
+                                    <input type="hidden" name="orderId" value="@order.OrderId" />
+                                    <button type="submit" class="btn btn-warning">Hoàn Tiền</button>
+                                </form>
+                                ;
+                                break;
+                            case "Chờ xác nhận":
+                                <form method="post" asp-action="ApproveOrder" asp-controller="OrderManageAdmin" class="mb-2">
+                                    <input type="hidden" name="orderId" value="@order.OrderId" />
+                                    <button type="submit" class="btn btn-success">Duyệt</button>
+                                </form>
+                                ;
+                                <form method="post" asp-action="CancelOrder" asp-controller="OrderManageAdmin">
+                                    <input type="hidden" name="orderId" value="@order.OrderId" />
+                                    <button type="submit" class="btn btn-danger">Hủy</button>
+                                </form>
+                                ;
+                                break;
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-action="OrdersDetail" asp-controller="OrderManageAdmin" asp-route-id="@order.OrderId" class="btn btn-info">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between align-items-center">
+    @Html.PagedListPager(Model, page => Url.Action("ManageOrders", new { page, status = ViewBag.St }), new X.PagedList.Web.Common.PagedListRenderOptions
+{
+    PageClasses = new[] { "page-link" },
+    ClassToApplyToFirstListItemInPager = "page-item",
+    ClassToApplyToLastListItemInPager = "page-item",
+})
+    <a asp-action="ManageOrders" class="btn btn-primary my-1">Quay lại</a>
+</div>

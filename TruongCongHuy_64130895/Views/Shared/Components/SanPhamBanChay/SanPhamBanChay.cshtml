@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TruongCongHuy_64130895.Models.Product>
+<!-- product_list part start-->
+<section class="product_list best_seller py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="section_tittle text-center">
+                    <h2>Bán chạy nhất<span>Cửa hàng</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center justify-content-between">
+            <div class="col-lg-12">
+                <div class="best_product_slider owl-carousel">
+                    @foreach (var item in Model)
+                    {
+                        <div class="single_product_item">
+                            <a asp-action="Details" asp-controller="SanPham" asp-route-id="@item.Id">
+                                <img src="/Admin-template/Images/SanPham/@item.ImageUrl" alt="" style="height:30vh">
+                            </a>
+                            <div class="single_product_text">
+                                <h4>@item.Name</h4>
+                                @if (item.IsOnSale)
+                                {
+                                    <h6 class="card-text"><del>@item.Price.ToString("#,##0 VND")</del></h6>
+                                    <h3 class="card-text text-info">@item.PriceSales.GetValueOrDefault().ToString("#,##0 VND")</h3>
+                                }
+                                else
+                                {
+                                    <h3 class="card-text text-info">@item.Price.ToString("#,##0 VND")</h3>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- product_list part end-->

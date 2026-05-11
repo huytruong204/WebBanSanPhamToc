@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Create Role";
+}
+
+<h2>Thêm quyền</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="roleName">Tên quyền</label>
+        <input type="text" class="form-control" id="roleName" name="roleName" required>
+    </div>
+    <button type="submit" class="btn btn-primary my-2">Thêm</button>
+</form>
+
+<a asp-action="Index" class="btn btn-primary my-2">Quay lại</a>

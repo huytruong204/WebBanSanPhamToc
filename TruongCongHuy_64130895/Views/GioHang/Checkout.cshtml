@@ -1,0 +1,142 @@
+﻿@model IEnumerable<TruongCongHuy_64130895.ViewModels.CartItem>
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<Customers> userManager
+
+@{
+    ViewData["Title"] = "Checkout";
+    var currentUser = await userManager.GetUserAsync(User);
+    var str = "x";
+}
+<!-- breadcrumb start-->
+<section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="breadcrumb_iner">
+                    <div class="breadcrumb_iner_item">
+                        <h2>Thanh toán đơn hàng</h2>
+                        <p>Trang chủ<span>-</span>Thanh toán đơn hàng của bạn</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb start-->
+<!--================Checkout Area =================-->
+<section class="checkout_area padding_top">
+    <div class="container">
+        <div class="billing_details">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>Chi tiết hóa đơn</h2>
+                    <form class="row contact_form" action="#" method="post" novalidate="novalidate">
+                        <div class="col-md-12 form-group p_star">
+                            <label>Họ và tên</label>
+                            <input type="text" placeholder="Họ và tên" class="form-control" value="@currentUser.FullName" />
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <label>Số điện thoại</label>
+                            <input type="text" placeholder="Số điện thoại" class="form-control" value="@currentUser.PhoneNumber" />
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <label>Địa chỉ</label>
+                            <input type="text" placeholder="Địa chỉ" class="form-control" value="@currentUser.Address" />
+                        </div>
+                    </form>
+                    <form asp-action="Checkout" method="post">
+                        <!-- Trường ẩn chứa Id của người dùng -->
+                        <input type="text" name="userId" class="form-control" value="@currentUser.Id" hidden readonly />
+
+                        <!-- Phương thức thanh toán -->
+                        <div class="form-group">
+                            <label for="paymentMethod" class="my-2">Phương thức thanh toán</label>
+                            <div class="my-2">
+                                
+                                <div class="form-check">
+                                    <input type="radio"
+                                           id="vnpay"
+                                           name="paymentMethod"
+                                           value="VNPAY"
+                                           class="form-check-input"
+                                           required />
+                                    <label class="form-check-label" for="vnpay">Thanh toán bằng VNPAY</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input type="radio"
+                                           id="Thanh toán khi nhận hàng"
+                                           name="paymentMethod"
+                                           value="Thanh toán khi nhận hàng"
+                                           class="form-check-input"
+                                           required />
+                                    <label class="form-check-label" for="cashOnDelivery">Thanh toán khi nhận hàng</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nút Thanh toán -->
+                        <button type="submit" class="btn_3">Thanh toán</button>
+                    </form>
+                </div>
+                <div class="col-lg-6">
+                    <div class="order_box">
+                        <h2>Đơn hàng của bạn</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th class="text-right">Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.ProductName</td>
+                                        <td class="text-center">@str@item.Quantity</td>
+                                        <td class="text-right" >@item.Total.ToString("#,##0 VND")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="text-right mr-2">
+                            <span>@Model.Sum(item => item.UnitPrice * item.Quantity).ToString("#,##0 VND")</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+<!--================End Checkout Area =================-->
+<style>
+
+    label {
+        font-size: 20px; /* Điều chỉnh kích cỡ chữ cho nhãn */
+        margin-bottom: 5px; /* Tạo khoảng cách dưới */
+        display: block; /* Đảm bảo nhãn nằm trên input */
+    }
+
+    input.form-control, .form-check-label {
+        font-size: 14px; /* Kích cỡ chữ cho input và label radio */
+    }
+
+    /* Khoảng cách giữa các radio button */
+    .form-check {
+        margin-bottom: 10px;
+    }
+
+    /* Điều chỉnh bảng 'Your Order' */
+ 
+
+    /* Nút thanh toán */
+    .btn_3 {
+        font-size: 16px; /* Tăng kích cỡ chữ */
+        padding: 10px 20px; /* Điều chỉnh padding cho nút */
+        margin-top: 20px;
+    }
+</style>

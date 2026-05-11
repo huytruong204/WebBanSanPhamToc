@@ -1,0 +1,61 @@
+﻿@model TruongCongHuy_64130895.Models.Review
+@using Microsoft.AspNetCore.Identity;
+
+@inject UserManager<Customers> userManager
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h4>Đánh giá của khách hàng</h4>
+<hr />
+<div>
+
+    <dl class="row bg-light rounded-2 p-2 ">
+        <dt class = "col-sm-2">
+            Khách hàng
+        </dt>
+        <dd class = "col-sm-10">
+            @{
+                var user = userManager.Users.FirstOrDefault(t => t.Id == Model.UserId);
+            }
+            <p>@user.UserName</p>
+        </dd>
+        <dt class = "col-sm-2">
+           Chất lượng sản phẩm
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt class = "col-sm-2">
+            Đánh giá
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+        <dt class = "col-sm-2">
+            Ngày  đánh giá
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+        <dt class = "col-sm-2">
+            Sản phẩm
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Product.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            ID Đơn hàng
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Order.Id)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="ReviewId" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-primary p-2">Quay lại</a>
+    </form>
+</div>

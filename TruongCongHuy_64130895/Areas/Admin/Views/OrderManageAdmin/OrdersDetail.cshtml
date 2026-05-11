@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TruongCongHuy_64130895.Models.OrderDetail>
+
+@{
+    ViewData["Title"] = "OrdersDetail";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Chi tiết đơn hàng</h1>
+<hr/>
+<!-- Thông tin tổng quan đơn hàng -->
+<div class="order-summary">
+    <p><strong>Ngày đặt hàng:</strong> @Model.FirstOrDefault()?.Order.OrderDate.ToString("dd/MM/yyyy")</p>
+    <p><strong>Tổng tiền:</strong> @Model.FirstOrDefault()?.Order.TotalAmount.ToString("#,##0 VND")</p>
+    <p><strong>Phương thức thanh toán:</strong> @ViewBag.PaymentMethod</p>
+</div>
+
+<!-- Chi tiết sản phẩm -->
+<table class="table bg-light rounded-2 p-2 table-bordered">
+    <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Ảnh sản phẩm</th>
+            <th>Đơn giá</th>
+            <th>Số lượng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>
+                    <img src="/Admin-template/Images/SanPham/@item.Product.ImageUrl"
+                         style="height: 100px; width: 200px; object-fit:contain" />
+                </td>
+                <td>@item.UnitPrice.ToString("#,##0 VND")</td>
+                <td>@item.Quantity</td>
+            </tr>
+        }
+    </tbody>
+</table>

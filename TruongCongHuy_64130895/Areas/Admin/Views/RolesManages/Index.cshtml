@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+
+@{
+    ViewData["Title"] = "Vai trò";
+}
+
+<h2>Vai trò</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th hidden>Mã</th>
+            <th>Tên vai trò</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td hidden >@role.Id</td>
+                <td>@role.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@role.Id" class="btn btn-primary">Chỉnh sửa</a>
+                    <a asp-action="Delete" asp-route-id="@role.Id" class="btn btn-danger">Xóa</a>
+                </td>
+@*                 @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@role.Id" class="btn btn-primary">Chỉnh sửa</a>
+                        <a asp-action="Delete" asp-route-id="@role.Id" class="btn btn-danger">Xóa</a>
+                    </td>
+                }
+                else
+                {
+                    <td>Chỉ xem</td>
+                } *@
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Create" class="btn btn-success">Tạo vai trò mới</a>
+@* 
+@if (User.IsInRole("Admin"))
+{
+    <a asp-action="Create" class="btn btn-success">Tạo vai trò mới</a>
+} *@

@@ -1,0 +1,74 @@
+﻿@using TruongCongHuy_64130895.ViewModels
+@model LoginVM
+@{
+    ViewData["Title"] = "Đăng Nhập";
+    Layout = "_LayoutCustomer";
+}
+<!-- breadcrumb start -->
+<section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="breadcrumb_iner">
+                    <div class="breadcrumb_iner_item">
+                        <h2>Đăng Nhập</h2>
+                        <p>Trang Chủ <span>-</span> Đăng Nhập</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb end -->
+<!--================login_part Area =================-->
+<section class="login_part padding_top">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_text text-center">
+                    <div class="login_part_text_iner">
+                        <h2>Chưa có tài khoản?</h2>
+                        <p>
+                            Hãy tạo tài khoản ngay để trải nghiệm các tính năng mua sắm,
+                            quản lý đơn hàng và nhận nhiều ưu đãi hấp dẫn từ cửa hàng.
+                        </p>
+                        <a asp-action="Register" class="btn_3">Tạo tài khoản mới</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_form">
+                    <div class="login_part_form_iner">
+                        <h3>
+                            Chào mừng bạn trở lại! <br>
+                            Vui lòng đăng nhập để tiếp tục.
+                        </h3>
+                        <form asp-action="Login" method="post" class="contact_form" novalidate="novalidate">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="col-md-12 form-group p_star">
+                                <label asp-for="EmailOrUsername" class="control-label">Tên đăng nhập hoặc Email</label>
+                                <input asp-for="EmailOrUsername" class="form-control" placeholder="Nhập tên đăng nhập hoặc email" />
+                                <span asp-validation-for="EmailOrUsername" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                                <label asp-for="Password" class="control-label">Mật khẩu</label>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="Nhập mật khẩu" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-4">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input asp-for="RememberMe" type="checkbox" class="form-check-input" /> Ghi nhớ đăng nhập
+                                    </label>
+                                </div>
+                                <a asp-action="ForgotPassword" asp-controller="KhachHang" >Quên mật khẩu?</a>
+                            </div>
+                            <input type="submit" class="btn btn-primary py-3 w-100 mb-4" value="Đăng Nhập" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================login_part end =================-->

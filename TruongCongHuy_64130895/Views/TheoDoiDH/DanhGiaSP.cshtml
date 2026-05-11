@@ -1,0 +1,55 @@
+﻿@model TruongCongHuy_64130895.Models.Review
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<Customers> userManager
+
+@{
+    ViewData["Title"] = "DanhGiaSP";
+    var currentUser = await userManager.GetUserAsync(User);
+}
+<!-- breadcrumb start-->
+<section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="breadcrumb_iner">
+                    <div class="breadcrumb_iner_item">
+                        <h2>Đánh giá</h2>
+                        <p>Trang Chủ <span>-</span>Đánh giá sản phẩm</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="row mt-5">
+    <div class="col-md-12 container">
+        <form class="row contact_form" asp-controller="TheoDoiDH" asp-action="DanhGiaSP" method="post">
+            <input type="hidden" name="id" value="@ViewData["ProductId"]" />
+            <input type="hidden" name="orderID" value="@ViewData["OrderId"]" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="name" value="@currentUser.UserName" readonly />
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <textarea asp-for="Comment" class="form-control" rows="2" placeholder="Đánh giá chi tiết"></textarea>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input asp-for="Rating" class="form-control" min="1" max="5" placeholder="Chất lượng sản phẩm" />
+                </div>
+            </div>
+            <div class="col-md-12 text-right">
+                <button type="submit" value="submit" class="btn_3">
+                    Đánh giá ngay
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+

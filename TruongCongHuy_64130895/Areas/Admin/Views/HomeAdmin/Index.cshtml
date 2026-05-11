@@ -1,0 +1,103 @@
+﻿            <!-- Sale & Revenue Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-line fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Sản phẩm sales</p>
+                    <h6 class="mb-0">@ViewBag.Sale</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Đơn hàng đã bán</p>
+                    <h6 class="mb-0">@ViewBag.Sold</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-area fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Tổng đơn hàng</p>
+                    <h6 class="mb-0">@ViewBag.Order</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Tổng doanh thu</p>
+                    <h6 class="mb-0">@ViewBag.Total.ToString("#,##0 VND")</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="bg-light text-center rounded p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Biểu đồ doanh thu</h6>
+                        <a asp-controller="StatisticalAdmin" asp-action="RevenueStatistics">Chi tiết</a>
+                    </div>
+                    <canvas id="bar"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Sale & Revenue End -->
+@section scripts {
+    <script>
+        const chartData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.ChartData));
+
+        const labels = chartData.map(item => new Date(item.Date).toLocaleDateString()); 
+        const values = chartData.map(item => item.Revenue); 
+
+        var ctx = $("#bar").get(0).getContext("2d");
+        var myChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Doanh thu theo ngày',
+                    backgroundColor: [
+                        "rgba(75, 192, 192, 0.7)",
+                        "rgba(54, 162, 235, 0.6)",
+                        "rgba(255, 206, 86, 0.5)",
+                        "rgba(153, 102, 255, 0.4)",
+                        "rgba(255, 159, 64, 0.3)"
+                    ],
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 1,
+                    data: values
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Doanh thu (VNĐ)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Ngày'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

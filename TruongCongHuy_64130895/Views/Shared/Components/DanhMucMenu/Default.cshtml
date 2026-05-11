@@ -1,0 +1,20 @@
+﻿@model IEnumerable<dynamic>
+    <div class="left_sidebar_area ">
+        <aside class="left_widgets p_filter_widgets ">
+            <div class="mt-5">
+                <h3>Danh mục</h3>
+            </div>
+            <div class="widgets_inner">
+                <ul class="list">
+                @foreach (var item in Model)
+                {
+
+                    <li>
+                        <a asp-controller="SanPham" asp-action="Index" asp-route-idcategory="@item.Category.Id">@item.Category.Name</a>
+                        <span>(@item.ProductCount)</span>
+                    </li>
+                }   
+                </ul>
+            </div>
+        </aside>
+    </div>

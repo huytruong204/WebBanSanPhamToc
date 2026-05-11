@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNetCore.Identity;
+
+@inject SignInManager<Customers> signInManager
+@inject UserManager<Customers> userManager
+
+<ul class="navbar-nav">
+    @if (Context.User.Identity.IsAuthenticated)
+    {
+        var currentUser = await userManager.GetUserAsync(User);
+        if (currentUser != null && currentUser.EmailConfirmed)
+        {
+            <li class="nav-item dropdown">
+                <!-- Avatar + Tên người dùng -->
+                <a href="#" class="nav-link dropdown-toggle" role="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img class="rounded-circle me-lg-2" src="~/Image/Avatar/@currentUser.avatar" alt="Avatar" style="width: 40px; height: 40px;">
+                    <span class="d-none d-md-inline">@currentUser.FullName</span>
+                </a>
+
+                <!-- Dropdown Menu -->
+                <ul class="dropdown-menu dropdown-menu-end avatar-menu" aria-labelledby="navbarDropdown">
+                    <li>
+                        <a asp-controller="KhachHang" asp-action="customer" asp-route-data="@currentUser.UserName" class="dropdown-item">
+                            Hồ Sơ Của Tôi
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="TheoDoiDH" class="dropdown-item">
+                            Đơn Hàng Của Tôi
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Logout" asp-controller="KhachHang" class="dropdown-item">
+                            Đăng Xuất
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        }
+    }
+</ul>
+
+
+<style>
+    .navbar .dropdown-menu {
+        position: absolute;
+        top: 100%; /* Hiển thị ngay dưới phần tử cha */
+        right: auto;
+        z-index: 1050; /* Đảm bảo nằm trên các thành phần khác */
+        display: none; /* Ẩn mặc định */
+    }
+        .navbar .dropdown:hover .dropdown-menu,
+        .navbar .dropdown-menu.show {
+            display: block; /* Hiện dropdown khi được hover hoặc click */
+        }
+</style>
+<script>
+    document.addEventListener('click', function (event) {
+        // Kiểm tra nếu click bên ngoài dropdown
+        var isClickInside = event.target.closest('.dropdown');
+        var dropdowns = document.querySelectorAll('.dropdown-menu');
+        dropdowns.forEach(menu => {
+            if (!isClickInside) {
+                menu.classList.remove('show');
+            }
+        });
+    });
+
+    // Tự động bật/tắt dropdown
+    var dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            let menu = this.nextElementSibling;
+            menu.classList.toggle('show');
+        });
+    });
+
+
+</script>

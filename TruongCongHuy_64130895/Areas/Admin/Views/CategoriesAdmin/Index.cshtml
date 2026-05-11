@@ -1,0 +1,92 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<TruongCongHuy_64130895.Models.Category>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Danh mục sản phẩm</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary p-2 my-2">Thêm mới</a>
+</p>
+
+<form method="get" class="my-3">
+    <div class="input-group">
+        <input type="text" class="form-control rounded-start" name="TimKiem" placeholder="Nhập từ khóa để tìm loại sản phẩm" value="@ViewBag.TimKiem" aria-describedby="button-addon2">
+        <button class="btn btn-outline-primary rounded-end" type="Submit" id="button-addon2"><i class="bi bi-search"></i></button>
+    </div>
+</form>
+
+<table class="table bg-light rounded-2 p-2 table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Tên loại sản phẩm
+            </th>
+            <th>
+                Mô tả
+            </th>
+            <th>
+                Ngày tạo
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary p-2">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary p-2">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div class="flex-column align-items-end d-flex">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, TimKiem = ViewBag.TimKiem }), new X.PagedList.Web.Common.PagedListRenderOptions
+{
+    PageClasses = new[] { "page-link" },
+    ClassToApplyToFirstListItemInPager = "page-item",
+    ClassToApplyToLastListItemInPager = "page-item",
+})
+    <div>
+        <a asp-action="Index" class="btn btn-primary my-1">Quay lại</a>
+    </div>
+</div>
+
+<style>
+    .custom-pagination {
+        margin-top: 20px;
+    }
+
+    .page-item {
+        margin: 0 5px;
+    }
+
+    .page-link {
+        color: #007bff;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+        .page-link:hover {
+            color: #0056b3;
+            background-color: #f1f1f1;
+            border-color: #ccc;
+        }
+
+</style>

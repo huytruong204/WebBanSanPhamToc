@@ -1,0 +1,36 @@
+﻿@model TruongCongHuy_64130895.Models.Category
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h4>Danh mục sản phẩm</h4>
+<hr />
+<div>
+    <dl class="row bg-light rounded-2 p-2">
+        <dt class = "col-sm-2">
+            Tên loại sản phẩm
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Mô tả
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            Ngày tạo
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xóa" class="btn btn-danger my-1" /> |
+        <a asp-action="Index" class="btn btn-primary my-1">Quay lại</a>
+    </form>
+</div>

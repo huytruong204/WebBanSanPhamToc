@@ -1,0 +1,143 @@
+﻿@model TruongCongHuy_64130895.Models.Product
+<!-- breadcrumb start-->
+<section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="breadcrumb_iner">
+                    <div class="breadcrumb_iner_item">
+                        <h2>Chi tiết sản phẩm</h2>
+                        <p>Trang Chủ <span>-</span>Chi tiết sản phẩm</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- breadcrumb start-->
+<!--================End Home Banner Area =================-->
+
+<div id="successToast" class="d-none">
+    <div class="icon-check mb-3">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+    </div>
+
+    <p class="mb-0 text-white ">Sản phẩm đã được thêm vào Giỏ hàng</p>
+</div>
+<!--================Single Product Area =================-->
+<div class="product_image_area section_padding ">
+    <div class="container">
+        <div class="row s_product_inner justify-content-around ">
+            <div class="col-xl-3 px-xl-0 px-4 ">
+                @await Component.InvokeAsync("DanhMucMenu")
+                @await Component.InvokeAsync("SanPhamNoiBat", new { limit = 9 })
+              </div>
+            <div class="col-xl-9 row pt-3">
+                <div class="col-xl-6 text-center">
+                    <img src="/Admin-template/Images/SanPham/@Model.ImageUrl" class="border border-3 border-info rounded" style="height: 45vh; width: 100%;" />
+                </div>
+                <div class="col-xl-6">
+                    <div class="s_product_text">
+                        <h3>@Model.Name</h3>
+                        @if (Model.IsOnSale)
+                        {
+                            <h6 ><del>@Model.Price.ToString("#,##0 VND")</del></h6>
+                            <h2 >@Model.PriceSales.GetValueOrDefault().ToString("#,##0 VND")</h2>
+                        }
+                        else
+                        {
+                            <h2>@Model.Price.ToString("#,##0 VND")</h2>
+                        }
+                        <ul class="list">
+                            <li>
+                                <a class="active">
+                                    <span>Loại</span> : @Model.Category.Name
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"> <span>Khả dụng</span> : Còn hàng</a>
+                            </li>
+                        </ul>
+                        <div class="card_area d-flex justify-content-between align-items-center mt-5">
+                            <div class="row">
+                                <div class="product_count my-2 justify-content-center">
+                                    <span class="inumber-decrement"> <i class="ti-minus"></i></span>
+                                    <input class="input-number" type="number" name="quantity" id="quantity" value="1" min="1">
+                                    <span class="number-increment"> <i class="ti-plus"></i></span>
+                                </div>
+                                <button onclick="clickAddToCart(@Model.Id)" class="btn btn-info rounded-pill border ml-3">
+                                    <i class="fa fa-shopping-cart"></i> &nbsp;<span>Thêm vào giỏ hàng</span>
+                                 </button>
+                            </div>
+						</div>
+                    </div>
+                </div>
+                <!--================Product Description Area =================-->
+                <section class="product_description_area col-xl-12">
+                    <div class="pl-xl-3 pl-0">
+                        <div class="row">
+                            <!-- Vùng Mô tả -->
+                            <div class="col-12 p-4 mb-5" style="border: 1px solid #ddd;">
+                                <h3 class="my-2">Mô tả</h3>
+                                <div class="content">
+                                    @Model.Description
+                                </div>
+                            </div>
+
+                            <!-- Vùng Đánh giá -->
+                            <div class="col-12 p-4" style="border: 1px solid #ddd;">
+                                <div class="content">
+                                    @await Component.InvokeAsync("DanhGia", new { productId = Model.Id })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--================End Product Description Area =================-->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--================End Single Product Area =================-->
+@await Component.InvokeAsync("SanPhamBanChay")
+<script>
+    function clickAddToCart(productId) {
+        var sl = $("#quantity").val();
+        $.ajax({
+            url: '@Url.Action("AddToCart", "GioHang")',
+            type: 'POST',
+            data: { productId: productId, quantity: sl },
+            success: function (response) {
+
+                if (response.success) {
+
+                    $.ajax({
+                        url: '@Url.Action("RefreshCartViewComponent", "GioHang")',
+                        success: function (response) {
+                            $("#View_Cart").html(response);
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(thrownError)
+                            alert("Error updating Cart ViewComponent.");
+                        }
+                    });
+
+                    const toast = $('#successToast');
+                    toast.removeClass('d-none');
+
+                    setTimeout(() => {
+                        toast.addClass('d-none');
+                    }, 2000);
+                } else {
+                    alert("Có lỗi xảy ra! Vui lòng thử lại.");
+                }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.responseText);
+            }
+        });
+    }
+</script>

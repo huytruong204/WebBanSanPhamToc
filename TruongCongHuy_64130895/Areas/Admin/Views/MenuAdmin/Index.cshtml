@@ -1,0 +1,61 @@
+﻿@model IEnumerable<TruongCongHuy_64130895.Models.MENU>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Menu</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary p-2">Thêm mới</a>
+</p>
+<table class="table bg-light rounded-2 p-2 table-bordered">
+    <thead>
+        <tr>
+            <th>IDMENU</th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParentId)
+            </th>
+            <th>
+                Tiêu đề
+            </th>
+            <th>
+                Url Menu
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MenuIndex)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsVisible)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MenuUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MenuIndex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsVisible)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary p-2">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary p-2">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

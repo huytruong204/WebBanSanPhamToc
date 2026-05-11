@@ -1,0 +1,122 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<TruongCongHuy_64130895.Models.Customers>
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1> Danh sách Khách hàng</h1>
+<form method="get" class="my-3">
+    <div class="input-group">
+        <input type="text" class="form-control rounded-start" name="TimKiem" placeholder="Nhập từ khóa để tên khách hàng" aria-describedby="button-addon2">
+        <button class="btn btn-outline-primary rounded-end" type="Submit" id="button-addon2"><i class="bi bi-search"></i></button>
+    </div>
+</form>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+<table class="table bg-light rounded-2 p-2 table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Họ và tên
+            </th>
+            <th>
+                Tên đăng nhập
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Số điện thoại
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Kích hoạt tài khoản
+            </th>
+            <th>
+                Ảnh đại diện
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                </td>
+                <td>
+                    <img src="~/Image/Avatar/@item.avatar"
+                         style="height: 100px; width: 200px; object-fit:contain" />
+                </td>
+                <td>
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" name="userID" value="@item.Id" />
+                        <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này không?');" class="btn btn-danger btn-sm">Xóa</button>
+                    </form>
+                </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div class="flex-column align-items-end d-flex">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, TimKiem = ViewBag.TimKiem }), new X.PagedList.Web.Common.PagedListRenderOptions
+{
+    PageClasses = new[] { "page-link" },
+    ClassToApplyToFirstListItemInPager = "page-item",
+    ClassToApplyToLastListItemInPager = "page-item",
+})
+    <div>
+        <a asp-action="Index" class="btn btn-primary my-1">Quay lại</a>
+    </div>
+</div>
+
+<style>
+    .custom-pagination {
+        margin-top: 20px;
+    }
+
+    .page-item {
+        margin: 0 5px;
+    }
+
+    .page-link {
+        color: #007bff;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+        .page-link:hover {
+            color: #0056b3;
+            background-color: #f1f1f1;
+            border-color: #ccc;
+        }
+
+</style>

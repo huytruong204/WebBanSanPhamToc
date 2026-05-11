@@ -1,0 +1,164 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<TruongCongHuy_64130895.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Sản phẩm</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary p-2 my-2">Thêm sản phẩm</a>
+</p>
+
+
+
+<form method="get" class="my-3">
+    <div class="d-flex">
+        <div class="me-2">
+            <select name="DanhMuc" class="form-control" asp-items="ViewBag.DanhMucList" onchange="this.form.submit()">
+                <option value="" selected disabled>Chọn danh mục</option>
+                <option value="">Tất cả</option>
+            </select>
+        </div>
+        <div class="input-group flex-grow-1">
+            <input type="text" class="form-control rounded-start" name="TimKiem" placeholder="Nhập từ khóa để tìm sản phẩm" value="@ViewBag.TimKiem" aria-describedby="button-addon2">
+            <button class="btn btn-outline-primary rounded-end" type="Submit" id="button-addon2"><i class="bi bi-search"></i></button>
+        </div>
+    </div>
+</form>
+
+
+<table class="table bg-light rounded-2 p-2 table-bordered">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-SapXep="Name" asp-route-ThuTu="@((ViewData["SapXep"]?.ToString() == "Name" && ViewData["ThuTu"]?.ToString() == "asc") ? "desc" : "asc")">
+                    Tên sản phẩm
+                </a>
+            </th>
+            <th>
+                Mô tả
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-SapXep="Price" asp-route-ThuTu="@((ViewData["SapXep"]?.ToString() == "Price" && ViewData["ThuTu"]?.ToString() == "asc") ? "desc" : "asc")">
+                    Đơn giá
+                </a>
+            </th>
+            <th>
+                Ảnh sản phẩm
+            </th>
+            <th>
+                Ngày tạo
+            </th>
+            <th>
+                Trạng thái
+            </th>
+            <th>
+                Danh mục sản phẩm
+            </th>
+            <th>
+                IsHots
+            </th>
+            <th>
+               IsSales
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-SapXep="DiscountPercent" asp-route-ThuTu="@((ViewData["SapXep"]?.ToString() == "DiscountPercent" && ViewData["ThuTu"]?.ToString() == "asc") ? "desc" : "asc")">
+                    Giảm giá(%)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-SapXep="PriceSale" asp-route-ThuTu="@((ViewData["SapXep"]?.ToString() == "PriceSale" && ViewData["ThuTu"]?.ToString() == "asc") ? "desc" : "asc")">
+                    Giá sales
+                </a>
+                
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                    <p style="display: -webkit-box; max-height: 3.2rem; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; white-space: normal; -webkit-line-clamp: 2; line-height: 1.6rem;">
+                        @item.Description
+                    </p>
+            </td>
+            <td>
+                    @item.Price.ToString("#,##0 VND")
+            </td>
+            <td>
+                    <img src="/Admin-template/Images/SanPham/@item.ImageUrl"
+                         style="height: 100px; width: 200px; object-fit:contain" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.IsHot)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.IsOnSale)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.DiscountPercent)
+            </td>
+            <td>
+                        @(item.PriceSales.HasValue ? item.PriceSales.Value.ToString("#,##0 VND") : null)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary p-2 mb-2">Sửa</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary p-2 mb-2">Chi tiết</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary p-2">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div class="flex-column align-items-end d-flex">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, SapXep = ViewData["SapXep"], ThuTu = ViewData["ThuTu"], TimKiem = ViewBag.TimKiem, DanhMuc = ViewBag.DanhMuc }), new X.PagedList.Web.Common.PagedListRenderOptions
+{
+    PageClasses = new[] { "page-link" },
+    ClassToApplyToFirstListItemInPager = "page-item",
+    ClassToApplyToLastListItemInPager = "page-item",
+})
+    <div>
+        <a asp-action="Index" class="btn btn-primary my-1">Quay lại</a>
+    </div>
+</div>
+
+<style>
+    .custom-pagination {
+        margin-top: 20px;
+    }
+
+    .page-item {
+        margin: 0 5px;
+    }
+
+    .page-link {
+        color: #007bff;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+        .page-link:hover {
+            color: #0056b3;
+            background-color: #f1f1f1;
+            border-color: #ccc;
+        }
+
+</style>

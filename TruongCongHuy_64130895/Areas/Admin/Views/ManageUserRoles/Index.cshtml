@@ -1,0 +1,61 @@
+﻿@model List<TruongCongHuy_64130895.Areas.Admin.Models.UserRolesViewModel>
+
+
+<h1>Danh sách Người dùng và Vai trò</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Tên Người dùng</th>
+            <th>Vai trò</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Count == 0)
+        {
+            <tr>
+                <td colspan="3">Không có dữ liệu.</td>
+            </tr>
+        }
+        else
+        {
+            int count = 1;
+            foreach (var user in Model)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>@user.UserName</td>
+                    <td>
+                        @if (user.Roles.Any())
+                        {
+                            @string.Join(", ", user.Roles)
+                        }
+                        else
+                        {
+                            <span>Không có vai trò</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="AddRoleToUser" asp-route-userId="@user.UserId" class="btn btn-success">Thêm vai trò</a>
+                    </td>
+                    <td>
+                        @foreach (var role in user.Roles)
+                        {
+                            <form asp-action="DeleteRoleFromUser" method="post">
+                                <input type="hidden" name="userId" value="@user.UserId" />
+                                <input type="hidden" name="roleName" value="@role" />
+                                <button type="submit" class="btn btn-success my-1" onclick="return confirm('Bạn có chắc chắn muốn xóa vai trò này khỏi người dùng không?')">Xóa vai trò</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+                count++;
+            }
+        }
+    </tbody>
+</table>
+
+

@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "Thống kê doanh thu theo ngày";
+}
+
+<div class="bg-light rounded p-3">
+    <h1>Thống kê doanh thu theo ngày</h1>
+
+    <form method="post" asp-action="RevenueStatistics">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="startDate" class="form-label">Từ ngày</label>
+                <input type="date" class="form-control" value="@(((DateTime?)ViewBag.startDate)?.ToString("yyyy-MM-dd"))" id="startDate" name="startDate" required>
+            </div>
+            <div class="col-md-4">
+                <label for="endDate" class="form-label">Đến ngày</label>
+                <input type="date" class="form-control" value="@(((DateTime?)ViewBag.endDate)?.ToString("yyyy-MM-dd"))" id="endDate" name="endDate" required>
+            </div>
+            <div class="col-md-4 align-self-end">
+                <button type="submit" class="btn btn-primary">Lọc</button>
+            </div>
+        </div>
+    </form>
+
+    <p><strong>Tổng doanh thu:</strong> @ViewBag.TotalRevenue?.ToString("#,##0 VND")</p>
+    <p><strong>Tổng số đơn hàng:</strong> @ViewBag.TotalOrders</p>
+
+    <h2>Doanh thu theo ngày</h2>
+    <div>
+        <div class="row justify-content-center">
+            <div class="col-xl-6 text-center rounded h-100">
+                <canvas id="bar"></canvas>
+            </div>
+            <div class="col-xl-6">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Doanh thu</th>
+                            <th>Số đơn hàng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.RevenueByDay != null)
+                        {
+                            foreach (var item in ViewBag.RevenueByDay)
+                            {
+                                <tr>
+                                    <td>@item.Date.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.TotalRevenue.ToString("#,##0 VND")</td>
+                                    <td>@item.TotalOrders</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+        // Lấy dữ liệu từ ViewBag
+        const revenueData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.RevenueByDay));
+
+        // Chuẩn bị dữ liệu cho biểu đồ
+    const labels = revenueData.map(item => new Date(item.Date).toLocaleDateString());
+        const revenues = revenueData.map(item => item.TotalRevenue);
+        const orders = revenueData.map(item => item.TotalOrders);
+
+        // Vẽ biểu đồ
+        const ctx = $('#bar')[0].getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Doanh thu (VND)',
+                        data: revenues,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Số đơn hàng',
+                        data: orders,
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Ngày'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Giá trị'
+                        }
+                    }
+                }
+            }
+        });
+</script>
+
