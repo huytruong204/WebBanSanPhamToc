@@ -34,15 +34,6 @@ Một nền tảng web ứng dụng mô hình MVC cung cấp trải nghiệm mua
 
 ---
 
-## 📸 Giao diện dự án (Screenshots)
-
-
-![Trang chủ](link)
-![Dashboard Quản trị](link)
-![Thanh toán VNPAY](link)
-
----
-
 ## 🛠️ Hướng dẫn cài đặt (Local Setup)
 
 Để chạy dự án này trên môi trường local của bạn, vui lòng làm theo các bước sau:
