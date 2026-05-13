@@ -173,42 +173,68 @@ namespace TruongCongHuy_64130895.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM rg)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var existingUser = await userManager.FindByEmailAsync(rg.Email) ?? await userManager.FindByNameAsync(rg.UserName);
                 if (existingUser != null)
                 {
-                    TempData["Error"] = "Tài khoản này đã tồn tại trong hệ thống";
+                    TempData["Error"] = "Tài khoản hoặc Email này đã tồn tại trong hệ thống";
                     return View(rg);
                 }
-                else
+
+                Customers user = new Customers()
                 {
+                    FullName = rg.FullName,
+                    Email = rg.Email,
+                    UserName = rg.UserName,
+                    Address = rg.Address,
+                };
 
-                    Customers user = new Customers()
-                    {
-                        FullName = rg.FullName,
-                        Email = rg.Email,
-                        UserName = rg.UserName,
-                        Address = rg.Address,
-                    };
-                    var result = await userManager.CreateAsync(user, rg.Password!);
-                    if (result.Succeeded)
-                    {
-                        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                        var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+                var result = await userManager.CreateAsync(user, rg.Password!);
 
-                        EmailHelper emailHelper = new EmailHelper(_configuration, "Activation");
-                        bool emailResponse = emailHelper.SendEmail(user.Email!, user.FullName!, confirmationLink!);
-                        if (emailResponse)
+                if (result.Succeeded)
+                {
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+
+                    EmailHelper emailHelper = new EmailHelper(_configuration, "Activation");
+                    var emailResponse = emailHelper.SendEmail(user.Email!, user.FullName!, confirmationLink!);
+
+                    if (emailResponse.isSuccess)
+                    {
+                        await userManager.AddToRoleAsync(user, "Khách Hàng");
+                        await signInManager.SignInAsync(user, false);
+                        return RedirectToAction("Login", "KhachHang");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Lỗi gửi mail: " + emailResponse.errorMessage);
+                    }
+                }
+                else 
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        if (error.Code.Contains("Password"))
                         {
-                            await userManager.AddToRoleAsync(user, "Khách Hàng");
-                            await signInManager.SignInAsync(user, false);
-                            return RedirectToAction("Login", "KhachHang");
+                            ModelState.AddModelError("Password", error.Description);
                         }
-
+                        else if (error.Code.Contains("UserName"))
+                        {
+                            ModelState.AddModelError("UserName", error.Description);
+                        }
+                        else if (error.Code.Contains("Email"))
+                        {
+                            ModelState.AddModelError("Email", error.Description);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
                     }
                 }
             }
+
             return View(rg);
         }
         public async Task<IActionResult> Logout()
@@ -239,8 +265,8 @@ namespace TruongCongHuy_64130895.Controllers
                 var resetLink = Url.Action("ResetPassword", "KhachHang", new { userId = user.Id, token = token }, Request.Scheme);
 
                 EmailHelper emailHelper = new EmailHelper(_configuration, "ForgotPassword");
-                bool emailResponse = emailHelper.SendEmail(user.Email!, user.FullName!, resetLink!);
-                if (!emailResponse)
+                var emailResponse = emailHelper.SendEmail(user.Email!, user.FullName!, resetLink!);
+                if (!emailResponse.isSuccess)
                 {
                     ModelState.AddModelError("", "Không thể gửi email. Vui lòng thử lại sau.");
                     return View(fg);

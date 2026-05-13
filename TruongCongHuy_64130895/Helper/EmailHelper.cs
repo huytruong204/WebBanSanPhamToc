@@ -15,14 +15,13 @@ namespace TruongCongHuy_64130895.Helper
             this.emailType = emailType; 
         }
 
-        public bool SendEmail(string userEmail, string userName, string link)
+        public (bool isSuccess, string errorMessage) SendEmail(string userEmail, string userName, string link)
         {
             try
             {
                 var emailSettings = _configuration.GetSection("EmailSettings");
-
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Your App Name", emailSettings["From"]));
+                message.From.Add(new MailboxAddress("Shop Online Huy", emailSettings["From"]));
                 message.To.Add(new MailboxAddress("", userEmail));
                 message.Subject = emailType == "Activation" ? "Kích hoạt tài khoản" : "Đặt lại mật khẩu";
 
@@ -37,10 +36,15 @@ namespace TruongCongHuy_64130895.Helper
                 }
                 else
                 {
-                    throw new Exception("Invalid email type");
+                    return (false, "Loại email không hợp lệ (Invalid email type)");
                 }
 
-                // Load và thay thế nội dung template
+                // BẮT LỖI FILE TEMPLATE
+                if (!System.IO.File.Exists(templatePath))
+                {
+                    return (false, $"Không tìm thấy file giao diện mail tại đường dẫn: {templatePath}");
+                }
+
                 var htmlContent = System.IO.File.ReadAllText(templatePath);
                 htmlContent = htmlContent.Replace("{Name}", userName)
                                          .Replace("{ConfirmationLink}", link)
@@ -60,12 +64,11 @@ namespace TruongCongHuy_64130895.Helper
                     client.Send(message);
                     client.Disconnect(true);
                 }
-                return true;
+                return (true, string.Empty);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error sending email: {ex.Message}");
-                return false;
+                return (false, ex.Message); 
             }
         }
     }

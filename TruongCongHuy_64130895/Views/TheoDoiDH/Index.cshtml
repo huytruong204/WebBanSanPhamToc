@@ -43,6 +43,10 @@
             <div class="mb-5 bg-white p-3" style="border-radius: 15px;">
                 <h4>Đơn hàng ID: @order.Id</h4>
                 <p>Trạng thái: <strong>@order.Status</strong></p>
+                @{
+                    var payment = order.Payments.FirstOrDefault(p => p.OrderId == order.Id);
+                }
+                <p>Phương thức thanh toán: <strong>@payment.PaymentMethod</strong></p>
                 <p>Ngày đặt: @order.OrderDate.ToString("dd/MM/yyyy")</p>
                 @if (order.Status == "Chờ xác nhận")
                 {
@@ -79,7 +83,7 @@
                                     var total = detail.UnitPrice * detail.Quantity;
                                 }
                                 <td>@total.ToString("#,##0 VND")</td>
-
+                          
                                 @if (order.Status == "Đã giao")
                                 {
                                     var reviewExists = existingReviews.Any(r => r.ProductId == detail.ProductId && r.OrderId == order.Id);

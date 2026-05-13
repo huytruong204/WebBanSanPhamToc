@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="appsettings.example.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Templates\ForgotPassword.html">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

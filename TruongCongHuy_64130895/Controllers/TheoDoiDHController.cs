@@ -24,9 +24,11 @@ namespace TruongCongHuy_64130895.Controllers
                 .Where(o => o.UserId == userId) 
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
+                .Include(p => p.Payments)
                 .OrderByDescending(o => o.OrderDate)
                 .ToPagedListAsync(page, pagesize);
             ViewData["ExistingReviews"] = await context.Reviews.Where(r => r.UserId == userId).ToListAsync();
+
             return View(orders);
         }
         [HttpGet]
