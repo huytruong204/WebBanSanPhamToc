@@ -29,7 +29,7 @@ Một nền tảng web ứng dụng mô hình MVC cung cấp trải nghiệm mua
 * **Quản lý danh mục & Sản phẩm (CRUD):** Thêm, sửa, xóa, và cập nhật trạng thái các món hàng.
 * **Quản lý Đơn hàng:** Theo dõi, phê duyệt và xử lý các đơn đặt hàng từ khách.
 * **Quản lý Người dùng & Phân quyền:** Quản trị viên có quyền kiểm soát tài khoản khách hàng, nhân viên và phân quyền linh hoạt (Admin, Nhân viên, Khách hàng).
-* **Quản lý Đánh giá:** Kiểm duyệt và quản lý bình luận/đánh giá từ phía người dùng.
+* **Quản lý Đánh giá:** Quản lý bình luận/đánh giá từ phía người dùng.
 
 ---
 
