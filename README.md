@@ -13,7 +13,6 @@ Một nền tảng web ứng dụng mô hình MVC cung cấp trải nghiệm mua
 * **Frontend:** HTML, CSS, JavaScript
 * **Bảo mật & Phân quyền:** ASP.NET Core Identity
 * **Tích hợp bên thứ 3:** VNPAY API (Thanh toán), SMTP (Gửi Email tự động)
-* **Triển khai (Deployment):** Microsoft Azure
 
 ---
 
